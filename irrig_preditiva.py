@@ -33,9 +33,9 @@ class SmartIrrigationSystem:
         """
         # Dados simulados de sensores
         data = {
-            'leit_p': np.random.choice([0, 1]),
-            'leit_k': np.random.choice([0, 1]),
-            'leit_ph': np.random.uniform(5.5, 14.0),
+            'leit_p': np.random.choice([0, 80]),
+            'leit_k': np.random.choice([0, 60]),
+            'leit_ph': np.random.uniform(0.0, 14.0),
             'leit_umidade': np.random.uniform(40, 80),  # %
             'leit_temperatura': np.random.uniform(20, 35),  # °C
             'data_leitura': datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -132,18 +132,12 @@ class SmartIrrigationSystem:
                 print("Nenhum modelo treinado encontrado. Treine primeiro.")
                 return None
         
-        # Preparação dos dados para previsão
-        features = ['leit_p', 'leit_k', 'leit_ph', 'leit_temperatura']
-        dados_previsao = np.array([
-            dados_atuais['leit_p'], 
-            dados_atuais['leit_k'], 
-            dados_atuais['leit_ph'], 
-            dados_atuais['leit_temperatura']
-        ]).reshape(1, -1)
-        
-        # Normalização dos dados
-        dados_previsao_scaled = self.scaler.transform(dados_previsao)
-        
+        # Cria um DataFrame para manter a consistência com o treinamento
+        dados_previsao = pd.DataFrame([dados_atuais])
+
+        # Normaliza os dados usando o scaler previamente treinado
+        dados_previsao_scaled = self.scaler.transform(dados_previsao[['leit_p', 'leit_k', 'leit_ph', 'leit_temperatura']])
+
         # Previsão de umidade
         umidade_prevista = self.model.predict(dados_previsao_scaled)[0]
         
@@ -161,6 +155,7 @@ class SmartIrrigationSystem:
                 'tempo_irrigacao': 0,
                 'umidade_prevista': umidade_prevista
             }
+
     
     def monitoramento_continuo(self, duracao_horas=24):
         """

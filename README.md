@@ -380,6 +380,6 @@ Este programa oferece um controle de irrigação inteligente e eficiente, ideal 
   ## link video youtube
     link do vídeo postado no Youtube (sem listagem), demonstrando o funcionamento completo do projeto
   **link:**
-    https://youtu.be/WCAkkt9Af1c
+    https://youtu.be/SU8DJqvMCA0
 
 
